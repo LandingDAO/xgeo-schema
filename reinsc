@@ -1,0 +1,305 @@
+{
+ "$schema": "http://json-schema.org/draft-07/schema#",
+ "type": "object",
+ "properties": {
+   "p": {
+     "const": "xgeo"
+   },
+   "op": {
+     "const": "reinsc"
+   },
+   "insc": {
+     "type": "string",
+     "pattern": "^[0-9a-f]{64}$"
+   },
+   "geo": {
+     "$ref": "#/definitions/featureCollection"
+   }
+ },
+ "required": ["p", "op", "insc", "geo"],
+ "additionalProperties": false,
+ "definitions": {
+   "featureCollection": {
+     "type": "object", 
+     "properties": {
+       "type": {
+         "const": "FeatureCollection"
+       },
+       "features": {
+         "type": "array",
+         "items": {
+           "$ref": "#/definitions/feature"
+         },
+         "minItems": 1
+       },
+       "crs": {
+         "$ref": "#/definitions/crs"
+       }
+     },
+     "required": ["type", "features"],
+     "additionalProperties": false
+   },
+   "feature": {
+     "type": "object",
+     "properties": {
+       "type": {
+         "const": "Feature"
+       },
+       "id": {
+         "oneOf": [
+           {
+             "type": "string"
+           },
+           {
+             "type": "number"
+           }
+         ]
+       },
+       "geometry": {
+         "oneOf": [
+           {
+             "$ref": "#/definitions/point"
+           },
+           {
+             "$ref": "#/definitions/lineString"
+           },
+           {
+             "$ref": "#/definitions/polygon"
+           },
+           {
+             "$ref": "#/definitions/multiPoint"
+           },
+           {
+             "$ref": "#/definitions/multiLineString"
+           },
+           {
+             "$ref": "#/definitions/multiPolygon"
+           },
+           {
+             "$ref": "#/definitions/geometryCollection"
+           },
+           {
+             "type": "null"
+           }
+         ]
+       },
+       "properties": {
+         "type": "object",
+         "properties": {
+           "name": {
+             "type": "string"
+           },
+           "description": {
+             "type": "string"
+           },
+           "timestamp": {
+             "type": "string",
+             "format": "date-time"
+           },
+           "author": {
+             "type": "string"
+           }
+         },
+         "required": ["name", "timestamp"],
+         "additionalProperties": true
+       }
+     },
+     "required": ["type", "geometry", "properties"],
+     "additionalProperties": false
+   },
+   "point": {
+     "type": "object",
+     "properties": {
+       "type": {
+         "const": "Point"
+       },
+       "coordinates": {
+         "$ref": "#/definitions/position"
+       },
+       "crs": {
+         "$ref": "#/definitions/crs"
+       }
+     },
+     "required": ["type", "coordinates"],
+     "additionalProperties": false
+   },
+   "lineString": {
+     "type": "object",
+     "properties": {
+       "type": {
+         "const": "LineString"
+       },
+       "coordinates": {
+         "type": "array",
+         "items": {
+           "$ref": "#/definitions/position"
+         },
+         "minItems": 2
+       },
+       "crs": {
+         "$ref": "#/definitions/crs"
+       }
+     },
+     "required": ["type", "coordinates"],
+     "additionalProperties": false
+   },
+   "polygon": {
+     "type": "object",
+     "properties": {
+       "type": {
+         "const": "Polygon"
+       },
+       "coordinates": {
+         "type": "array",
+         "items": {
+           "$ref": "#/definitions/linearRing"
+         },
+         "minItems": 1
+       },
+       "crs": {
+         "$ref": "#/definitions/crs" 
+       }
+     },
+     "required": ["type", "coordinates"],
+     "additionalProperties": false
+   },
+   "multiPoint": {
+     "type": "object",
+     "properties": {
+       "type": {
+         "const": "MultiPoint"  
+       },
+       "coordinates": {
+         "type": "array",
+         "items": {
+           "$ref": "#/definitions/position"
+         }
+       },
+       "crs": {
+         "$ref": "#/definitions/crs"
+       }
+     },
+     "required": ["type", "coordinates"],
+     "additionalProperties": false
+   },
+   "multiLineString": {
+     "type": "object",
+     "properties": {
+       "type": {
+         "const": "MultiLineString"
+       },
+       "coordinates": {
+         "type": "array",
+         "items": {
+           "type": "array",
+           "items": {
+             "$ref": "#/definitions/position"
+           },
+           "minItems": 2
+         }
+       },
+       "crs": {
+         "$ref": "#/definitions/crs"
+       }
+     },
+     "required": ["type", "coordinates"],
+     "additionalProperties": false
+   },
+   "multiPolygon": {
+     "type": "object",
+     "properties": {
+       "type": {
+         "const": "MultiPolygon"
+       },  
+       "coordinates": {
+         "type": "array",
+         "items": {
+           "type": "array",
+           "items": {
+             "$ref": "#/definitions/linearRing"
+           },
+           "minItems": 1
+         }
+       },
+       "crs": {
+         "$ref": "#/definitions/crs"
+       }
+     },
+     "required": ["type", "coordinates"],
+     "additionalProperties": false
+   },
+   "geometryCollection": {
+     "type": "object",
+     "properties": {
+       "type": {
+         "const": "GeometryCollection"
+       },
+       "geometries": {
+         "type": "array",
+         "items": {
+           "oneOf": [
+             {
+               "$ref": "#/definitions/point"
+             },
+             {
+               "$ref": "#/definitions/lineString"
+             },
+             {
+               "$ref": "#/definitions/polygon"
+             },
+             {
+               "$ref": "#/definitions/multiPoint"
+             },
+             {
+               "$ref": "#/definitions/multiLineString" 
+             },
+             {
+               "$ref": "#/definitions/multiPolygon"
+             }
+           ]
+         }
+       },
+       "crs": {
+         "$ref": "#/definitions/crs"
+       }
+     },
+     "required": ["type", "geometries"],
+     "additionalProperties": false
+   },
+   "linearRing": {
+     "type": "array",
+     "items": {
+       "$ref": "#/definitions/position" 
+     },
+     "minItems": 4
+   },
+   "position": {
+     "type": "array",
+     "items": {
+       "type": "number"
+     },
+     "minItems": 2,
+     "maxItems": 3
+   },
+   "crs": {
+     "type": "object",
+     "properties": {
+       "type": {
+         "const": "name"
+       },
+       "properties": {
+         "type": "object",
+         "properties": {
+           "name": {
+             "type": "string"
+           }
+         },
+         "required": ["name"],
+         "additionalProperties": false
+       }
+     },
+     "required": ["type", "properties"],
+     "additionalProperties": false
+   }
+ }
+}
