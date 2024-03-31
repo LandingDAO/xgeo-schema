@@ -7,16 +7,20 @@
  "properties": {
    "p": {
      "const": "xgeo"
+     "description": "Protocol identifier"
    },
    "op": {
      "const": "reinsc"
+     "description": "Operation type"
    },
    "insc": {
      "type": "string",
-     "pattern": "^[0-9a-f]{64}$"
+     "pattern": "^[0-9a-f]{64}i\\d+$",
+     "description": "Inscription ID to be reinscribed, in the format 'txid' + 'i' + 'index'"
    },
    "geo": {
      "$ref": "#/definitions/featureCollection"
+     "description": "GeoJSON FeatureCollection object"
    }
  },
  "required": ["p", "op", "insc", "geo"],
