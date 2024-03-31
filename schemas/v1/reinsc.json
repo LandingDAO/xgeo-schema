@@ -18,7 +18,7 @@
       "pattern": "^[0-9a-f]{64}i\\d+$",
       "description": "Inscription ID to be reinscribed, in the format 'txid' + 'i' + 'index'"
     },
-    "geo": {
+    "placemark": {
       "$ref": "#/definitions/featureCollection",
       "description": "GeoJSON FeatureCollection object"
     }
