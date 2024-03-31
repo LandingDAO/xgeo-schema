@@ -1,332 +1,337 @@
 {
- "$schema": "http://json-schema.org/draft-07/schema#",
- "$id": "https://raw.githubusercontent.com/LandingDAO/xgeo-schema/main/schemas/v1/reinsc.json"
- "title": "Xgeo Reinscription Schema",
- "description": "JSON Schema for validating Xgeo protocol reinscription operations",
- "type": "object",
- "properties": {
-   "p": {
-     "const": "xgeo"
-     "description": "Protocol identifier"
-   },
-   "op": {
-     "const": "reinsc"
-     "description": "Operation type"
-   },
-   "insc": {
-     "type": "string",
-     "pattern": "^[0-9a-f]{64}i\\d+$",
-     "description": "Inscription ID to be reinscribed, in the format 'txid' + 'i' + 'index'"
-   },
-   "geo": {
-     "$ref": "#/definitions/featureCollection"
-     "description": "GeoJSON FeatureCollection object"
-   }
- },
- "required": ["p", "op", "insc", "geo"],
- "additionalProperties": false,
- "definitions": {
-   "featureCollection": {
-     "type": "object", 
-     "properties": {
-       "type": {
-         "const": "FeatureCollection"
-       },
-       "features": {
-         "type": "array",
-         "items": {
-           "$ref": "#/definitions/feature"
-         },
-         "minItems": 1
-       },
-       "crs": {
-         "$ref": "#/definitions/crs"
-       }
-     },
-     "required": ["type", "features"],
-     "additionalProperties": false
-   },
-   "feature": {
-     "type": "object",
-     "properties": {
-       "type": {
-         "const": "Feature"
-       },
-       "id": {
-         "oneOf": [
-           {
-             "type": "string"
-           },
-           {
-             "type": "number"
-           }
-         ]
-       },
-       "geometry": {
-         "oneOf": [
-           {
-             "$ref": "#/definitions/point"
-           },
-           {
-             "$ref": "#/definitions/lineString"
-           },
-           {
-             "$ref": "#/definitions/polygon"
-           },
-           {
-             "$ref": "#/definitions/multiPoint"
-           },
-           {
-             "$ref": "#/definitions/multiLineString"
-           },
-           {
-             "$ref": "#/definitions/multiPolygon"
-           },
-           {
-             "$ref": "#/definitions/geometryCollection"
-           }
-         ]
-       },
-       "properties": {
-         "type": "object",
-         "properties": {
-           "name": {
-             "type": "string"
-           },
-           "description": {
-             "type": "string"
-           },
-           "category": {
-             "type": "string"
-           },
-           "images": {
-             "type": "array",
-             "items": {
-               "type": "string",
-               "format": "uri"
-           },
-           "urls": {
-             "type": "array", 
-             "items": {
-               "type": "string",
-               "format": "uri"
-           },
-           "tags": {
-             "type": "array",
-             "items": {
-               "type": "string"
-           }
-         },
-         "additionalProperties": true
-       }
-     },
-     "required": ["type", "geometry", "properties"],
-     "additionalProperties": false
-   },
-   "point": {
-     "type": "object",
-     "properties": {
-       "type": {
-         "const": "Point"
-       },
-       "coordinates": {
-         "$ref": "#/definitions/position"
-       },
-       "crs": {
-         "$ref": "#/definitions/crs"
-       }
-     },
-     "required": ["type", "coordinates"],
-     "additionalProperties": false
-   },
-   "lineString": {
-     "type": "object",
-     "properties": {
-       "type": {
-         "const": "LineString"
-       },
-       "coordinates": {
-         "type": "array",
-         "items": {
-           "$ref": "#/definitions/position"
-         },
-         "minItems": 2
-       },
-       "crs": {
-         "$ref": "#/definitions/crs"
-       }
-     },
-     "required": ["type", "coordinates"],
-     "additionalProperties": false
-   },
-   "polygon": {
-     "type": "object",
-     "properties": {
-       "type": {
-         "const": "Polygon"
-       },
-       "coordinates": {
-         "type": "array",
-         "items": {
-           "$ref": "#/definitions/linearRing"
-         },
-         "minItems": 1
-       },
-       "crs": {
-         "$ref": "#/definitions/crs" 
-       }
-     },
-     "required": ["type", "coordinates"],
-     "additionalProperties": false
-   },
-   "multiPoint": {
-     "type": "object",
-     "properties": {
-       "type": {
-         "const": "MultiPoint"  
-       },
-       "coordinates": {
-         "type": "array",
-         "items": {
-           "$ref": "#/definitions/position"
-         }
-       },
-       "crs": {
-         "$ref": "#/definitions/crs"
-       }
-     },
-     "required": ["type", "coordinates"],
-     "additionalProperties": false
-   },
-   "multiLineString": {
-     "type": "object",
-     "properties": {
-       "type": {
-         "const": "MultiLineString"
-       },
-       "coordinates": {
-         "type": "array",
-         "items": {
-           "type": "array",
-           "items": {
-             "$ref": "#/definitions/position"
-           },
-           "minItems": 2
-         }
-       },
-       "crs": {
-         "$ref": "#/definitions/crs"
-       }
-     },
-     "required": ["type", "coordinates"],
-     "additionalProperties": false
-   },
-   "multiPolygon": {
-     "type": "object",
-     "properties": {
-       "type": {
-         "const": "MultiPolygon"
-       },  
-       "coordinates": {
-         "type": "array",
-         "items": {
-           "type": "array",
-           "items": {
-             "$ref": "#/definitions/linearRing"
-           },
-           "minItems": 1
-         }
-       },
-       "crs": {
-         "$ref": "#/definitions/crs"
-       }
-     },
-     "required": ["type", "coordinates"],
-     "additionalProperties": false
-   },
-   "geometryCollection": {
-     "type": "object",
-     "properties": {
-       "type": {
-         "const": "GeometryCollection"
-       },
-       "geometries": {
-         "type": "array",
-         "items": {
-           "oneOf": [
-             {
-               "$ref": "#/definitions/point"
-             },
-             {
-               "$ref": "#/definitions/lineString"
-             },
-             {
-               "$ref": "#/definitions/polygon"
-             },
-             {
-               "$ref": "#/definitions/multiPoint"
-             },
-             {
-               "$ref": "#/definitions/multiLineString" 
-             },
-             {
-               "$ref": "#/definitions/multiPolygon"
-             }
-           ]
-         }
-       },
-       "crs": {
-         "$ref": "#/definitions/crs"
-       }
-     },
-     "required": ["type", "geometries"],
-     "additionalProperties": false
-   },
-   "linearRing": {
-     "type": "array",
-     "items": {
-       "$ref": "#/definitions/position" 
-     },
-     "minItems": 4
-   },
-   "position": {
-     "type": "array",
-     "items": {
-       "type": "number"
-     },
-     "minItems": 2,
-     "maxItems": 3
-   },
-   "crs": {
-     "type": "object",
-     "title": "Coordinate Reference System",
-     "description": "The Coordinate Reference System (CRS) of the feature geometries.",
-     "default": {
-       "type": "name",
-       "properties": {
-         "name": "urn:ogc:def:crs:OGC:1.3:CRS84"
-       }
-     },
-     "properties": {
-       "type": {
-         "type": "string",
-         "enum": ["name"],
-         "default": "name"
-       },
-       "properties": {
-         "type": "object",
-         "properties": {
-           "name": {
-             "type": "string",
-             "default": "urn:ogc:def:crs:OGC:1.3:CRS84"
-           }
-         },
-         "required": ["name"],
-         "additionalProperties": false
-       }
-     },
-     "required": ["type", "properties"],
-     "additionalProperties": false
-   }
- }
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://raw.githubusercontent.com/LandingDAO/xgeo-schema/main/schemas/v1/reinsc.json",
+  "title": "Xgeo Reinscription Schema",
+  "description": "JSON Schema for validating Xgeo protocol reinscription operations",
+  "type": "object",
+  "properties": {
+    "p": {
+      "const": "xgeo",
+      "description": "Protocol identifier"
+    },
+    "op": {
+      "const": "reinsc",
+      "description": "Operation type"
+    },
+    "insc": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}i\\d+$",
+      "description": "Inscription ID to be reinscribed, in the format 'txid' + 'i' + 'index'"
+    },
+    "geo": {
+      "$ref": "#/definitions/featureCollection",
+      "description": "GeoJSON FeatureCollection object"
+    }
+  },
+  "required": ["p", "op", "insc", "geo"],
+  "additionalProperties": false,
+  "definitions": {
+    "coordinateType": {
+      "type": "array",
+      "items": {
+        "type": "number"
+      },
+      "minItems": 2,
+      "maxItems": 3,
+      "description": "A position as [x,y] or [x,y,z] coordinates"
+    },
+    "crsType": {
+      "type": "object",
+      "title": "Coordinate Reference System",
+      "description": "The Coordinate Reference System (CRS) of the feature geometries.",
+      "default": {
+        "type": "name",
+        "properties": {
+          "name": "urn:ogc:def:crs:OGC:1.3:CRS84"
+        }
+      },
+      "properties": {
+        "type": {
+          "type": "string",
+          "enum": ["name"],
+          "default": "name"
+        },
+        "properties": {
+          "type": "object",
+          "properties": {
+            "name": {
+              "type": "string",
+              "default": "urn:ogc:def:crs:OGC:1.3:CRS84"
+            }
+          },
+          "required": ["name"],
+          "additionalProperties": false
+        }
+      },
+      "required": ["type", "properties"],
+      "additionalProperties": false
+    },
+    "featureCollection": {
+      "type": "object",
+      "required": ["type", "features"],
+      "properties": {
+        "type": {
+          "const": "FeatureCollection"
+        },
+        "features": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/feature"
+          },
+          "minItems": 1
+        },
+        "crs": {
+          "$ref": "#/definitions/crsType"
+        }
+      },
+      "additionalProperties": false
+    },
+    "feature": {
+      "type": "object",
+      "required": ["type", "geometry", "properties"],
+      "properties": {
+        "type": {
+          "const": "Feature"
+        },
+        "id": {
+          "oneOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "number"
+            }
+          ]
+        },
+        "geometry": {
+          "oneOf": [
+            {
+              "$ref": "#/definitions/point"
+            },
+            {
+              "$ref": "#/definitions/lineString"
+            },
+            {
+              "$ref": "#/definitions/polygon"
+            },
+            {
+              "$ref": "#/definitions/multiPoint"
+            },
+            {
+              "$ref": "#/definitions/multiLineString"
+            },
+            {
+              "$ref": "#/definitions/multiPolygon"
+            },
+            {
+              "$ref": "#/definitions/geometryCollection"
+            }
+          ]
+        },
+        "properties": {
+          "type": "object",
+          "properties": {
+            "name": {
+              "type": "string"
+            },
+            "description": {
+              "type": "string"
+            },
+            "category": {
+              "type": "string"
+            },
+            "images": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "format": "uri"
+              }
+            },
+            "urls": {
+              "type": "array",
+              "items": {
+                "type": "string", 
+                "format": "uri"
+              }
+            },
+            "tags": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            }
+          },
+          "additionalProperties": true
+        }
+      },
+      "additionalProperties": false
+    },
+    "point": {
+      "type": "object",
+      "required": ["type", "coordinates"],
+      "properties": {
+        "type": {
+          "const": "Point"
+        },
+        "coordinates": {
+          "$ref": "#/definitions/coordinateType"
+        },
+        "crs": {
+          "$ref": "#/definitions/crsType"
+        }
+      },
+      "additionalProperties": false
+    },
+    "lineString": {
+      "type": "object", 
+      "required": ["type", "coordinates"],
+      "properties": {
+        "type": {
+          "const": "LineString"
+        },
+        "coordinates": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/coordinateType"
+          },
+          "minItems": 2
+        },
+        "crs": {
+          "$ref": "#/definitions/crsType"
+        }
+      },
+      "additionalProperties": false
+    },
+    "polygon": {
+      "type": "object",
+      "required": ["type", "coordinates"], 
+      "properties": {
+        "type": {
+          "const": "Polygon"
+        },
+        "coordinates": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/linearRing" 
+          },
+          "minItems": 1
+        },
+        "crs": {
+          "$ref": "#/definitions/crsType"
+        }
+      },
+      "additionalProperties": false
+    },
+    "multiPoint": {
+      "type": "object",
+      "required": ["type", "coordinates"],
+      "properties": {
+        "type": {
+          "const": "MultiPoint"
+        },
+        "coordinates": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/coordinateType"
+          }
+        },
+        "crs": {
+          "$ref": "#/definitions/crsType"
+        }
+      },
+      "additionalProperties": false
+    },
+    "multiLineString": {
+      "type": "object",
+      "required": ["type", "coordinates"],
+      "properties": {
+        "type": {
+          "const": "MultiLineString"  
+        },
+        "coordinates": {
+          "type": "array",
+          "items": {
+            "type": "array",
+            "items": {
+              "$ref": "#/definitions/coordinateType" 
+            },
+            "minItems": 2
+          }
+        },
+        "crs": {
+          "$ref": "#/definitions/crsType"
+        }
+      },
+      "additionalProperties": false
+    },
+    "multiPolygon": {
+      "type": "object",
+      "required": ["type", "coordinates"],
+      "properties": {
+        "type": {
+          "const": "MultiPolygon"
+        },
+        "coordinates": {
+          "type": "array",
+          "items": {
+            "type": "array",
+            "items": {
+              "$ref": "#/definitions/linearRing"
+            },
+            "minItems": 1  
+          }
+        },
+        "crs": {
+          "$ref": "#/definitions/crsType"
+        }
+      },
+      "additionalProperties": false
+    },
+    "geometryCollection": {
+      "type": "object",
+      "required": ["type", "geometries"], 
+      "properties": {
+        "type": {
+          "const": "GeometryCollection"
+        },
+        "geometries": {
+          "type": "array",
+          "items": {
+            "oneOf": [
+              {
+                "$ref": "#/definitions/point"
+              },
+              {
+                "$ref": "#/definitions/lineString"
+              },
+              {  
+                "$ref": "#/definitions/polygon"
+              },
+              {
+                "$ref": "#/definitions/multiPoint"
+              },
+              {
+                "$ref": "#/definitions/multiLineString"
+              },
+              {
+                "$ref": "#/definitions/multiPolygon" 
+              }
+            ]
+          }
+        },
+        "crs": {
+          "$ref": "#/definitions/crsType"
+        }
+      },
+      "additionalProperties": false
+    },
+    "linearRing": {
+      "type": "array",
+      "items": {
+        "$ref": "#/definitions/coordinateType"
+      },
+      "minItems": 4,
+      "description": "A closed LineString with 4 or more positions"
+    }
+  }
 }
