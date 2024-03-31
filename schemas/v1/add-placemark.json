@@ -17,11 +17,6 @@
       "$ref": "#/definitions/featureCollection",
       "description": "GeoJSON FeatureCollection object"
     }
-      },
-      "required": ["locked", "transferable", "updateable"],
-      "additionalProperties": false,
-      "description": "Rules governing the behavior of the placemark"
-    }
   },
   "required": ["p", "op", "placemark"],
   "additionalProperties": false,
