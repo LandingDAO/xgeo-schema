@@ -1,6 +1,8 @@
 {
  "$schema": "http://json-schema.org/draft-07/schema#",
  "$id": "https://raw.githubusercontent.com/LandingDAO/xgeo-schema/main/schemas/v1/reinsc.json"
+ "title": "Xgeo Reinscription Schema",
+ "description": "JSON Schema for validating Xgeo protocol reinscription operations",
  "type": "object",
  "properties": {
    "p": {
