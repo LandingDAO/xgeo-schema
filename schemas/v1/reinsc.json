@@ -23,7 +23,7 @@
       "description": "GeoJSON FeatureCollection object"
     }
   },
-  "required": ["p", "op", "insc", "geo"],
+  "required": ["p", "op", "insc", "placemark"],
   "additionalProperties": false,
   "definitions": {
     "coordinateType": {
